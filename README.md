@@ -33,6 +33,8 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             → "인터넷에서 가져온 파일에 대해 제한된 보기 사용" 체크 해제</p>
 		<br> 
+		<li>수강철회한 과목이 있다면, 반영되지 않으니 사용자가 직접 목록에서 제거해야 합니다.</li>
+		<li>재학 중 변동된 학과 졸업요건이 있다면, 사용자가 직접 반영해야 합니다.</li>
     </div>
     </div>
     <div style="text-align: left;">
