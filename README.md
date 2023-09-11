@@ -2,7 +2,7 @@
     <img src="https://capsule-render.vercel.app/api?type=waving&color=0:fed2ea,100:fc3dff&height=180&text=수강%20정보%20추출%20프로그램&animation=twinkling&fontColor=48005c&fontSize=50" />
     </div>
     <div style="text-align: left;">
-		<h1>미완성</h1>
+		<h1>*추후 계속 업데이트 예정*</h1>
     <h2 style="border-bottom: 1px solid #21262d; color: #c9d1d9;"> 📒 사용법 </h2>  
     <div style="font-weight: 700; font-size: 15px; text-align: left; color: #c9d1d9;">
 		<h3>⚙ 초기세팅</h3>  
@@ -35,6 +35,7 @@
 		<br> 
 		<li>수강철회한 과목이 있다면, 반영되지 않으니 사용자가 직접 목록에서 제거해야 합니다.</li>
 		<li>재학 중 변동된 학과 졸업요건이 있다면, 사용자가 직접 반영해야 합니다.</li>
+	<br>
     </div>
     </div>
     <div style="text-align: left;">
