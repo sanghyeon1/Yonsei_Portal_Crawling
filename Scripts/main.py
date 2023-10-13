@@ -296,6 +296,7 @@ def main(latency):
         srch_btn.click()
         driver.implicitly_wait(latency)
 
+        time.sleep(0.2)
         sub_kind = driver.find_element(By.XPATH, links.lec_sub_kind_xpath)
         sub_kind_list.append(sub_kind.text)
 
