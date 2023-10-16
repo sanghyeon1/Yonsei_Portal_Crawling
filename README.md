@@ -5,7 +5,8 @@
 		<h1>*추후 계속 업데이트 예정*</h1>
     <h2 style="border-bottom: 1px solid #21262d; color: #c9d1d9;"> 📒 사용법 </h2>  
     <div style="font-weight: 700; font-size: 15px; text-align: left; color: #c9d1d9;">
-		<h3>⚙ 초기세팅</h3>  
+	<h3>⚙ 초기세팅</h3>  
+	    <li> Crawler 내부 파일은 모두 하나의 폴더 안에 들어있어야 합니다.("다운로드 받으면 그냥 안 건드는 것이 좋음")</li>
             <br>
             config.ini 
             <li> 로그인 정보가 포함되는 파일이므로, 연결프로그램을 메모장으로 연다.</li>
