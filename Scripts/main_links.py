@@ -10,6 +10,9 @@ lecture_list_page = "https://underwood1.yonsei.ac.kr/com/lgin/SsoCtr/initExtPage
 # =============
 # ==↓ XPath ↓==
 # =============
+
+# 학사행정 버튼
+haksa_admin_xpath = "/html/body/div[1]/div[1]/div/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[1]/div/div/div[3]/div/div/div/div/div/div[1]/div/div/div"
 # 성적 버튼
 score_xpath = "/html/body/div[1]/div[1]/div/div[5]/div/div[1]/div/div/div/div/div[1]/div/div/div[1]/div/div/div[4]/div/div/div[1]/div/div/div/a"
 # 전체 성적 조회 버튼
@@ -20,9 +23,13 @@ sem_xpath = "/html/body/div[1]/div[1]/div/div[1]/div/div/div[2]/div/div/div[2]/d
 score_path_front = "/html/body/div[1]/div[1]/div/div[1]/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/div[2]/div/div/div/div[1]/div/div[1]/div/div/div[3]/div/div[1]/div/div[2]/div/div/div/div[3]/div/div/div/div[4]/div/div/"
 score_path_back = "div/div/div/div/div[3]/div/div/div[3]/div/div[2]/div/div[1]/div/div/"
 
+# 시스템 오류 경고창 xpath.
+system_error_xpath = "/html/body/div[1]/div[2]/div/div[2]/div[1]/div[2]/div/div/div[1]/div/div/div/div/div[2]/div/div/div/div"
+
+
 # 수강 편람에서의 xpath들.
-# 학부(미래)
-hakbu_mirae_xpath = "/html/body/div[1]/div[1]/div/div[1]/div/div/div[3]/div/div/div[1]/div/div/div/div/div/div[1]/div/div/div/div/div[3]/div/div/div/div[4]/div/div[1]/input"
+# 학부 선택 목록.
+hakbu_div_xpath = "/html/body/div[1]/div[1]/div/div[1]/div/div/div[3]/div/div/div[1]/div/div/div/div/div/div[1]/div/div/div/div/div[3]/div/div/div/div[4]/div/div[1]/input"
 # 년도 선택상자.
 lec_year_xpath = "/html/body/div[1]/div[1]/div/div[1]/div/div/div[3]/div/div/div[1]/div/div/div/div/div/div[1]/div/div/div/div/div[3]/div/div/div/div[2]/div/div/div[1]/div/div[1]/input"
 # 학기 선택상자.

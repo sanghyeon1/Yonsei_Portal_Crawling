@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 
 import openpyxl
@@ -75,9 +76,18 @@ def conn_webpage(driver, link):
 
 
 def click_button(driver, xpath, latency):
-    btn = driver.find_element(By.XPATH, xpath)
-    btn.click()
+    wait = WebDriverWait(driver, latency)
+
+    try:
+        btn = wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+        btn.click()
+    except Exception as e:
+        # 요소를 찾지 못하거나 클릭 실패 시 예외 처리
+        print(f"클릭 실패: {e}")
+
     driver.implicitly_wait(latency)
+    # btn = driver.find_element(By.XPATH, xpath)
+    # btn.click()
 
 
 def get_semesters(driver):
@@ -171,14 +181,22 @@ def create_df(semester_list, hakjeong_list, sub_name_list, score_list, retake_li
     return df
 
 
-def input_hakbu(driver):
-    select_mirae_field = driver.find_element(By.XPATH, links.hakbu_mirae_xpath)
-    select_mirae_field.click()
-    select_mirae_field.send_keys(Keys.CONTROL + "A")
+def input_hakbu(driver, school_num):
+
+    select_hakbu_field = driver.find_element(By.XPATH, links.hakbu_div_xpath)
+    select_hakbu_field.click()
+    select_hakbu_field.send_keys(Keys.CONTROL + "A")
     time.sleep(0.1)
-    select_mirae_field.send_keys(Keys.BACKSPACE)
+    select_hakbu_field.send_keys(Keys.BACKSPACE)
     time.sleep(0.1)
-    select_mirae_field.send_keys("학부(미래)")
+    if school_num == 1:
+        # 신촌일 때.
+        select_hakbu_field.send_keys("학부(신촌)")
+    elif school_num == 2:
+        # 미래일 때.
+        select_hakbu_field.send_keys("학부(미래)")
+    else:
+        print("[Error] 학교 선택이 올바르지 않습니다.")
 
 
 def write_excel(df):
@@ -190,7 +208,7 @@ def write_excel(df):
     print("엑셀시트 작성완료.")
 
 
-def main(latency):
+def main(latency, school_num):
     # 웹 드라이버 초기화.
     driver = ini_website()
 
@@ -199,11 +217,18 @@ def main(latency):
     driver.maximize_window()
 
     portal_login(driver)  # 포탈 로그인.
+    print("포탈 로그인 완료")
 
     # 학사 페이지 이동.
     conn_webpage(driver, links.haksa_page)
     driver.maximize_window()
     driver.implicitly_wait(latency)
+    print("학사 페이지 이동 완료")
+
+    click_button(driver, links.system_error_xpath, latency)
+    print("시스템 오류 클릭 완료")
+    click_button(driver, links.haksa_admin_xpath, latency)
+    print("학사행정 클릭 완료")
 
     # 성적 버튼 클릭.
     click_button(driver, links.score_xpath, latency)
@@ -221,17 +246,19 @@ def main(latency):
     # 데이터프레임을 만들 수 있는지 체크.
     check_make_df(semester_list, hakjeong_list, sub_name_list, score_list, retake_list)
 
+    print("데이터프레임 생성 시작")
     # 데이터프레임 생성.
     df = create_df(semester_list, hakjeong_list, sub_name_list, score_list, retake_list)
+    print("데이터프레임 생성 완료")
 
     # 테이블 표시.
     df = df.reset_index(drop=True)
     pd.options.display.max_rows = None
-    print(df)
 
     # 전체 학점 계산.
     total_credit = df['학점'].sum()
 
+    print("재수강 과목 존재 여부 확인 및 해당 학점 제거")
     # 재수강 과목 학점 제거.
     for idx, row in df.iterrows():
         if row['재수강 여부'] == 'O':
@@ -239,14 +266,14 @@ def main(latency):
             total_credit -= retake_score
         else:
             pass
-
-    print(total_credit)
+    print("재수강 과목 프로세스 완료")
 
     # 수강편람 홈페이지 연결.
     conn_webpage(driver, links.lecture_list_page)
     driver.implicitly_wait(latency)
     time.sleep(latency*(2/3))
-
+    print("수강편람 페이지 이동 완료")
+    print("수강목록 크롤링 시작")
     # 수강편람에서 과목종별 탐색하는 코드.
     sub_kind_list = []
 
@@ -277,10 +304,9 @@ def main(latency):
         else:
             pass
 
-        input_hakbu(driver)
+        input_hakbu(driver, school_num)
 
         lec_num = df['학정번호'][i][0:7]
-        print(lec_num)
         time.sleep(0.1)
         lec_num_field = driver.find_element(By.XPATH, links.lec_num_xpath)
         lec_num_field.click()
@@ -299,11 +325,10 @@ def main(latency):
         time.sleep(0.2)
         sub_kind = driver.find_element(By.XPATH, links.lec_sub_kind_xpath)
         sub_kind_list.append(sub_kind.text)
-
-    print(len(sub_kind_list))
-
+    print("수강편람 크롤링 완료")
     df.insert(loc=4, column='과목종별', value=sub_kind_list)
     print(df)
 
     write_excel(df)
     driver.quit()
+    print("프로그램 종료")

@@ -3,6 +3,8 @@ from tkinter import messagebox
 import tkinter.font
 from main import main
 
+# 전역 변수
+global school_num
 
 class Fonts:
     def font1(self):
@@ -36,16 +38,45 @@ class Buttons:
 
 
 def button_click():
+    global school_num
     param = entry.get()
-    if param == "":
+
+    if param == "" or param == "ex) 3":
         messagebox.showwarning("경고", f"대기 시간을 입력해주세요.")
     else:
-        param = float(param)
-        if isinstance(param, float) and param >= 0:
-            print(param)
-            main(param)
-        else:
+        try:
+            param = float(param)
+            if isinstance(param, float) and param >= 0:
+                try:
+                    print("school_num is ", school_num)
+                    main(param, school_num)
+                except:
+                    messagebox.showwarning("경고", f"캠퍼스를 반드시 선택해주세요.")
+            else:
+                messagebox.showwarning("경고", f"대기 시간이 잘못되었습니다.\n param: {type(param)}")
+        except:
             messagebox.showwarning("경고", f"대기 시간이 잘못되었습니다.\n param: {type(param)}")
+
+
+
+def checkbox_clicked(checkbox):
+    global school_num
+    if checkbox == checkbox1:
+        checkbox2.deselect()  # checkbox1이 선택되면 checkbox2는 선택 해제
+        school_num = 1
+    else:
+        checkbox1.deselect()  # checkbox2가 선택되면 checkbox1은 선택 해제
+        school_num = 2
+
+
+def on_entry_click(event):
+    if entry.get() == "ex) 3":  # 입력칸에 '3'이 있을 때만 삭제
+        entry.delete(0, END)
+
+
+def on_entry_focus_out(event):
+    if entry.get() == "":  # 입력칸이 비어있을 때 초기값으로 '3' 설정
+        entry.insert(0, "ex) 3")
 
 
 window = Tk()
@@ -73,6 +104,10 @@ label = Label(window, text="페이지 로딩 대기 시간 입력:")
 canvas.create_window(50, 180, window=label)
 
 entry = Entry(window, width=15, font=font.font2())
+entry.insert(0, "ex) 3")  # 초기값으로 '3'을 입력
+entry.config(fg="gray")  # 초기값 텍스트의 색상을 회색으로 지정
+entry.bind("<FocusIn>", on_entry_click)
+entry.bind("<FocusOut>", on_entry_focus_out)
 canvas.create_window(50, 200, window=entry)
 
 
@@ -87,6 +122,17 @@ button.run_btn.bind("<ButtonRelease-1>", button.button_release)
 canvas.create_window(50, 290, window=button.run_btn)
 label3 = Label(window, text="실행버튼", font=font.font3())
 canvas.create_window(50, 375, window=label3)
+
+var1 = IntVar()
+var2 = IntVar()
+
+checkbox1 = Checkbutton(window, text="신촌", variable=var1, onvalue=1, offvalue=0, font=font.font2(),
+                        command=lambda: checkbox_clicked(checkbox1))
+checkbox2 = Checkbutton(window, text="원주", variable=var2, onvalue=1, offvalue=0, font=font.font2(),
+                        command=lambda: checkbox_clicked(checkbox2))
+
+canvas.create_window(250, 200, window=checkbox1)
+canvas.create_window(350, 200, window=checkbox2)
 
 window.mainloop()
 
